@@ -1,5 +1,5 @@
-Firstname="Trin " 
+firstname="Trin " 
 lastname="Saithongkum"
-print(Firstname+lastname)
-Whole_name =Firstname+" "+lastname
+print(firstname+lastname)
+Whole_name =firstname+" "+lastname
 print ("whole_name")
