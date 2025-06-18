@@ -1,4 +1,4 @@
-#!/usr/bin/evn python3
+ #!/usr/bin/env python3
 import sys
 
 args = sys.argv[1:]
@@ -6,9 +6,10 @@ args = sys.argv[1:]
 if len(args) == 0:
     print("none")
 else:
-    combined = '' .john(args)
+    combined = "".join(args)
     z_chars = [char for char in combined if char == 'z']
     if len(z_chars) == 0:
         print("none")
-    else :
-        print(''.join(z_chars))
+    else:
+        print("".join(z_chars))
+
