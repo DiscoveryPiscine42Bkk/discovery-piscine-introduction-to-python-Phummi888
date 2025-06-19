@@ -1,99 +1,64 @@
-from typing import List, Dict
+from typing import List
 
-class FarmTask:
-    def __init__(self, name: str, date: str, task_type: str):
+class Customer:
+    def __init__(self, name, num_people):
         self.name = name
-        self.date = date
-        self.task_type = task_type
+        self.num_people = num_people
 
-class TaskManager:
-    def __init__(self):
-        self.tasks: List[FarmTask] = []
-    
-    def add_task(self, name: str, date: str, task_type: str):
-        """เพิ่มงานใหม่"""
-        new_task = FarmTask(name, date, task_type)
-        self.tasks.append(new_task)
-        print("เพิ่มงานสำเร็จ")
-    
-    def show_all_tasks(self):
-        """แสดงรายการงานทั้งหมด"""
-        if not self.tasks:
-            print("ยังไม่มีงานในรายการ")
-            return
-        
-        print("\nรายการงานทั้งหมด:")
-        for i, task in enumerate(self.tasks, 1):
-            print(f"{i}. {task.date} – {task.name} ({task.task_type})")
-    
-    def delete_task(self, task_index: int):
-        """ลบงานตามลำดับที่ระบุ"""
-        if 1 <= task_index <= len(self.tasks):
-            removed_task = self.tasks.pop(task_index - 1)
-            print(f"ลบงาน: {removed_task.name} แล้ว")
+class QueueManager:
+    def __init__(self):  # ✅ แก้จาก init → __init__
+        self.queue: List[Customer] = []
+
+    def add_customer(self, name: str, num_people: int):
+        new_customer = Customer(name, num_people)
+        self.queue.append(new_customer)
+        print(f"เพิ่มคิวให้ {name} จำนวน {num_people} คนแล้ว")
+
+    def show_queue(self):
+        if not self.queue:
+            print("ยังไม่มีลูกค้าในคิว")
         else:
-            print("ลำดับงานไม่ถูกต้อง")
-    
-    def summarize_tasks(self):
-        """สรุปจำนวนงานแต่ละประเภท"""
-        if not self.tasks:
-            print("ยังไม่มีงานในรายการ")
-            return
-        
-        type_counts: Dict[str, int] = {}
-        for task in self.tasks:
-            type_counts[task.task_type] = type_counts.get(task.task_type, 0) + 1
-        
-        print("\nสรุปจำนวนงานแต่ละประเภท:")
-        for task_type, count in type_counts.items():
-            print(f"- {task_type}: {count} งาน")
+            print("\nคิวลูกค้าปัจจุบัน:")
+            for i, customer in enumerate(self.queue, 1):
+                print(f"{i}. {customer.name} ({customer.num_people} คน)")
+
+    def serve_next_customer(self):
+        if not self.queue:
+            print("ไม่มีลูกค้าในคิว")
+        else:
+            customer = self.queue.pop(0)
+            print(f"เสิร์ฟคิวของ {customer.name} จำนวน {customer.num_people} คนแล้ว")
 
 def display_menu():
-    """แสดงเมนูหลัก"""
-    print("\n" + "="*40)
-    print("Smart Farm Task Organizer")
-    print("="*40)
-    print("1. เพิ่มงานในฟาร์ม")
-    print("2. แสดงรายการงานทั้งหมด")
-    print("3. ลบงาน")
-    print("4. สรุปจำนวนงานในแต่ละประเภท")
-    print("5. ออกจากโปรแกรม")
-    print("="*40)
+    print("\n=== ระบบจัดคิวหมูกระทะ ===")
+    print("1. เพิ่มคิวลูกค้า")
+    print("2. แสดงคิวทั้งหมด")
+    print("3. เสิร์ฟลูกค้าคิวแรก")
+    print("4. ออกจากโปรแกรม")
 
 def main():
-    manager = TaskManager()
-    
+    manager = QueueManager()
+
     while True:
         display_menu()
-        choice = input("เลือกเมนู (1-5): ").strip()
-        
+        choice = input("เลือกเมนู (1-4): ").strip()
+
         if choice == "1":
-            name = input("ป้อนชื่องาน: ")
-            date = input("ป้อนวันที่ (dd/mm/yyyy): ")
-            task_type = input("ประเภทงาน (พืชผัก/ปลูกสัตว์/อื่นๆ): ")
-            manager.add_task(name, date, task_type)
-        
+            name = input("ชื่อลูกค้า: ")
+            try:
+                num = int(input("จำนวนคน: "))
+                manager.add_customer(name, num)
+            except ValueError:
+                print("ต้องกรอกตัวเลขเท่านั้นสำหรับจำนวนคน")
         elif choice == "2":
-            manager.show_all_tasks()
-        
+            manager.show_queue()
         elif choice == "3":
-            manager.show_all_tasks()
-            if manager.tasks:
-                try:
-                    task_num = int(input("ลำดับของงานที่ต้องการลบ: "))
-                    manager.delete_task(task_num)
-                except ValueError:
-                    print("กรุณาป้อนตัวเลขเท่านั้น")
-        
+            manager.serve_next_customer()
         elif choice == "4":
-            manager.summarize_tasks()
-        
-        elif choice == "5":
-            print("\nขอบคุณที่ใช้โปรแกรม Smart Farm!")
+            print("ขอบคุณที่ใช้ระบบคิวหมูกระทะ")
             break
-        
         else:
-            print("กรุณาเลือกเมนู 1-5 เท่านั้น")
+            print("กรุณาเลือกแค่ 1-4 เท่านั้น")
 
 if __name__ == "__main__":
     main()
