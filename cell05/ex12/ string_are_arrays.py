@@ -12,4 +12,3 @@ else:
         print("none")
     else:
         print("".join(z_chars))
-
